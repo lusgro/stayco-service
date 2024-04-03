@@ -1,12 +1,11 @@
 const request = require('request');
+require('dotenv').config()
 
 function getAccessToken() {
-    const client_id = '7b5afc5ef1744921b98041719f50d5a1';
-    const client_secret = 'de94ef49b7674ab59a1de9ba6db84900';
     const authOptions = {
         url: 'https://accounts.spotify.com/api/token',
         headers: {
-          'Authorization': 'Basic ' + (new Buffer.from(client_id + ':' + client_secret).toString('base64'))
+          'Authorization': 'Basic ' + (new Buffer.from(process.env.client_id + ':' + process.env.client_secret).toString('base64'))
         },
         form: {
           grant_type: 'client_credentials'
