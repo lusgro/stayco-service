@@ -7,10 +7,12 @@ const { getAlbums } = require('./getAlbums');
 const { saveAlbum } = require('./bd/saveAlbum');
 const { getSongs } = require('./getSongs');
 const { saveSong } = require('./bd/saveSong');
+const cors = require('cors');
 
 async function main() {
     const app = express();
     app.use(express.json());
+    app.use(cors());
     const port = 3000;
     app.listen(port, () => {
         console.log(`Servicio corriendo en el puerto ${port}`);
@@ -38,14 +40,19 @@ async function main() {
 
 async function saveNewArtist(artist, token) {
     const newArtist = await getNewArtist(artist, token);
-    const artist_id_bd = await saveArtist(newArtist);
+    if (newArtist) {
+        const artist_id_bd = await saveArtist(newArtist);
 
-    const albums = await getAlbums(newArtist.ID_Spotify, artist_id_bd, token);
-    await Promise.all(albums.map(async (album) => {
-        const album_id_bd = await saveAlbum(album);
-        const songs = await getSongs(album.ID_Spotify, album_id_bd, token);
-        await Promise.all(songs.map((song) => saveSong(song, album_id_bd)));
-    }));
+        const albums = await getAlbums(newArtist.ID_Spotify, artist_id_bd, token);
+        await Promise.all(albums.map(async (album) => {
+            const album_id_bd = await saveAlbum(album);
+            const songs = await getSongs(album.ID_Spotify, album_id_bd, token);
+            await Promise.all(songs.map((song) => saveSong(song, album_id_bd)));
+        }));
+    }
+    else{
+        console.log("Artista nulo")
+    }
 }
 
-main();
+main().catch(e => console.error(`Error: ${e}`));

@@ -6,14 +6,17 @@ const sqlConfig = {
     server: 'localhost',
     driver: 'msnodesqlv8',
     options: {
-        trustedConnection: true
+        trustedConnection: true,
+        trustServerCertificate: true
     }
 }
+
+// DESKTOP-3DKDU00\SQLEXPRESS
 
 module.exports = {
     connectSql: async function () {
         try {
-            await sql.connect(sqlConfig)
+            return await sql.connect(sqlConfig)
         } catch (err) {
             console.error(err)
         }
@@ -29,8 +32,7 @@ module.exports = {
 
     getArtists: async function () {
         try {
-            const result = await sql.query`select * from Artistas`
-            console.log(result.recordset);
+            return await sql.query`select * from Artistas`
         } catch (err) {
             console.error(err)
         }
