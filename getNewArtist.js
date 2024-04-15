@@ -13,10 +13,17 @@ async function getNewArtist(artistName, token) {
     };
     const response = await axios.request(options);
     const artist = response.data.artists.items[0];
-    if (artist.images[0] == null) {
-        return new Artista(artist.id, artist.name, artist.followers.total, '/img/Imagenes-Artistas/sin_imagen.jpg');
+
+    const responseArtists = await getArtists()
+    const allArtists = responseArtists.recordset
+    const artistExists = allArtists.some(element => element.Nombre == artist.name);
+
+    if(!artistExists) {
+        const { id, name, followers: { total }, images } = artist;
+        const imageUrl = images[0] ? images[0].url : '/img/Imagenes-Artistas/sin_imagen.jpg';
+        return new Artista(id, name, total, imageUrl);
     }
-    return new Artista(artist.id, artist.name, artist.followers.total, artist.images[0].url);
+    return null;
 }
 
 module.exports = {getNewArtist}
