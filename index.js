@@ -7,10 +7,12 @@ const { getAlbums } = require('./getAlbums');
 const { saveAlbum } = require('./bd/saveAlbum');
 const { getSongs } = require('./getSongs');
 const { saveSong } = require('./bd/saveSong');
+const cors = require('cors');
 
 async function main() {
     const app = express();
     app.use(express.json());
+    app.use(cors());
     const port = 3000;
     app.listen(port, () => {
         console.log(`Servicio corriendo en el puerto ${port}`);
@@ -55,4 +57,4 @@ async function saveNewArtist(artist, token) {
     }
 }
 
-main();
+main().catch(e => console.error(`Error: ${e}`));

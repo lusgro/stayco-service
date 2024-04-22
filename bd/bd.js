@@ -11,6 +11,8 @@ const sqlConfig = {
     }
 }
 
+// DESKTOP-3DKDU00\SQLEXPRESS
+
 module.exports = {
     connectSql: async function () {
         try {
