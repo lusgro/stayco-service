@@ -14,6 +14,7 @@ async function getNewArtist(artistName, token) {
     };
     const response = await axios.request(options);
     const artist = response.data.artists.items[0];
+
     let existe = false;
 
     const responseArtists = await getArtists()
@@ -30,7 +31,7 @@ async function getNewArtist(artistName, token) {
         }
         return new Artista(artist.id, artist.name, artist.followers.total, artist.images[0].url);
     }
-    else{
+    else {
         return null
     }
 }
